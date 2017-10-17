@@ -36,4 +36,19 @@ class ShopController extends Controller
         );
 
     }
+
+    /**
+     * @Route("/shop/delete/{productId}", name="deleteProduct")
+     */
+    public function deleteProductAction($productId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getReference('AppBundle:Product', $productId);
+
+        $em->remove($product);
+        $em->flush();
+
+        return new Response('Product removed');
+    }
 }
