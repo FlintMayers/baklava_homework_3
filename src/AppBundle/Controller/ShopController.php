@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Product;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,8 +26,10 @@ class ShopController extends Controller
         $product->setCategory($category);
 
         $em = $this->getDoctrine()->getManager();
+
         //add cascade parameter to $category property in Product entity instead
 //        $em->persist($category);
+
         $em->persist($product);
         $em->flush();
 
@@ -39,12 +42,16 @@ class ShopController extends Controller
 
     /**
      * @Route("/shop/delete/{productId}", name="deleteProduct")
+     * @ParamConverter("product", options={"id" = "productId"}, class="AppBundle:Product")
      */
-    public function deleteProductAction($productId)
+    public function deleteProductAction(Product $product = null)
     {
-        $em = $this->getDoctrine()->getManager();
+        if(empty($product)) {
+            return new Response('Unfortunately the requested product could no be located.');
+        }
 
-        $product = $em->getReference('AppBundle:Product', $productId);
+        $em = $this->getDoctrine()->getManager();
+//        $product = $em->getReference('AppBundle:Product', $productId);
 
         $em->remove($product);
         $em->flush();

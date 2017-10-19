@@ -36,15 +36,17 @@ class Product
     private $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="products", cascade={"all"})
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @var int
+     *
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="products", cascade={"persist"})
+     * @ORM\JoinColumn(name="category_id", nullable=false, referencedColumnName="id")
      */
     private $category;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="active", type="smallint")
+     * @ORM\Column(name="active", type="boolean")
      */
     private $active;
 
